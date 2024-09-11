@@ -36,11 +36,13 @@ const crawler = new PlaywrightCrawler({
 
       await Dataset.pushData(results);
     } else if (request.label === "CATEGORY") {
-      await page.waitForSelector(".model-list > li > a");
-      await enqueueLinks({
-        selector: ".model-list > li > a",
-        label: "DETAIL",
-      });
+      const products = await page.isVisible(".model-list > li > a");
+      if (products) {
+        await enqueueLinks({
+          selector: ".model-list > li > a",
+          label: "DETAIL",
+        });
+      }
     } else {
       await page.waitForSelector(".brand-select");
       await enqueueLinks({
